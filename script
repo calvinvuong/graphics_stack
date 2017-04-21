@@ -1,0 +1,31 @@
+ident
+sphere
+0 0 0 35
+rotate
+z 90
+move
+250 470 0
+apply
+ident
+box
+225 435 25 50 400 50
+torus
+250 400 0 15 60
+torus
+250 350 0 25 75
+torus
+250 275 0 35 100
+torus
+250 175 0 45 150
+rotate
+x 20
+rotate
+y 45
+rotate
+x 180
+move
+0 500 0
+apply
+display
+save
+spinning_top.png
