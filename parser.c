@@ -116,6 +116,7 @@ void parse_file ( char * filename,
       tmp = new_matrix(4,4); // tmp polygon matrix
       add_box(tmp, xvals[0], yvals[0], zvals[0],
 	      xvals[1], yvals[1], zvals[1]);
+
       matrix_mult(coor_stack->data[coor_stack->top], tmp); // multiply by coordinate matrix
       draw_polygons(tmp, s, c);
       free_matrix(tmp);
@@ -203,10 +204,12 @@ void parse_file ( char * filename,
       fgets(line, sizeof(line), f);
       sscanf(line, "%lf %lf %lf",
 	     xvals, yvals, zvals);
-      /* printf("%lf %lf %lf\n", */
-      /* 	xvals[0], yvals[0], zvals[0]); */ 
+
       tmp = make_scale( xvals[0], yvals[0], zvals[0]);
-      matrix_mult(tmp, coor_stack->data[ coor_stack->top ]);
+      
+      matrix_mult(coor_stack->data[coor_stack->top], tmp);
+      // copy resultant matrix into top of stack
+      copy_matrix(tmp, coor_stack->data[coor_stack->top]);
     }//end scale
 
     else if ( strncmp(line, "move", strlen(line)) == 0 ) {
@@ -216,7 +219,11 @@ void parse_file ( char * filename,
       /* printf("%lf %lf %lf\n", */
       /* 	xvals[0], yvals[0], zvals[0]); */ 
       tmp = make_translate( xvals[0], yvals[0], zvals[0]);
-      matrix_mult(tmp, coor_stack->data[ coor_stack->top ]);
+      
+      matrix_mult(coor_stack->data[coor_stack->top], tmp);
+      // copy new tmp back into top of stack
+      copy_matrix(tmp, coor_stack->data[coor_stack->top]);
+      
     }//end translate
 
     else if ( strncmp(line, "rotate", strlen(line)) == 0 ) {
@@ -234,7 +241,10 @@ void parse_file ( char * filename,
       else 
 	tmp = make_rotZ( theta );
       
-      matrix_mult(tmp, coor_stack->data[ coor_stack->top ]);
+      matrix_mult(coor_stack->data[coor_stack->top], tmp);
+      // copy new tmp back into top of stack
+      copy_matrix(tmp, coor_stack->data[coor_stack->top]);
+      
     }//end rotate
 
     else if ( strncmp(line, "clear", strlen(line)) == 0 ) {
